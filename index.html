@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Website with Preloader</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            cursor: none; /* Hide cursor */
+            background-color: grey;
+        }
+
+        .preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #000000;
+            display: flex;
+            flex-direction: column; /* Stack items vertically */
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease;
+        }
+
+        .loader {
+            width: 60px;
+            height: 60px;
+            border: 5px solid #333;
+            border-top: 5px solid #52ee4c;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 30px; /* Space between loader and text */
+        }
+
+        .typewriter {
+            color: #52ee4c;
+            font-family: 'Courier New', monospace;
+            font-size: 3em;
+            overflow: hidden;
+            white-space: nowrap;
+            letter-spacing: 3px;
+            text-align: center;
+            opacity: 0; /* Start hidden for fade-in effect */
+        }
+
+        @keyframes typing {
+            from { width: 0 }
+            to { width: 100% }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .content {
+            padding: 20px;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .content.show {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="preloader">
+        <div class="loader"></div> <!-- Loader positioned above the text -->
+        <div class="typewriter" id="typewriter"></div>
+    </div>
+
+    <div class="content">
+        <h1>Welcome to My Website</h1>
+        <p>This is the main content of the website.</p>
+    </div>
+
+    <script>
+        window.addEventListener('load', function() {
+            const preloader = document.querySelector('.preloader');
+            const content = document.querySelector('.content');
+            const typewriter = document.getElementById('typewriter');
+
+            const sentences = [
+                "Welcome to Anomie's World !!!",
+                // "Prepare for an extraordinary journey ahead!",
+                "Establishing Secure Connection Tunnel....",
+                "Obataining IP Address...",
+                "Requesting Server Acess...",
+                "...*** Acess Granted ***..."
+            ];
+
+            let currentSentenceIndex = 0;
+
+            function typeNextSentence() {
+                if (currentSentenceIndex < sentences.length) {
+                    typewriter.textContent = ''; // Clear previous sentence
+                    typewriter.style.opacity = '1'; // Make it visible
+                    typeWriter(sentences[currentSentenceIndex], typewriter, 0);
+                } else {
+                    // After all sentences are typed, fade out preloader
+                    preloader.style.opacity = '0';
+                    content.classList.add('show');
+                    setTimeout(() => {
+                        preloader.style.display = 'none';
+                    }, 500);
+                }
+            }
+
+            function typeWriter(sentence, element, i) {
+                if (i < sentence.length) {
+                    element.textContent += sentence.charAt(i);
+                    setTimeout(() => typeWriter(sentence, element, i + 1), 50); // Typing speed
+                } else {
+                    setTimeout(() => {
+                        element.style.opacity = '0'; // Fade out the current sentence
+                        currentSentenceIndex++; // Move to the next sentence
+                        setTimeout(typeNextSentence, 300); // Wait before typing the next sentence
+                    }, 1000); // Wait before clearing
+                }
+            }
+
+            // Start typing the first sentence after a delay
+            setTimeout(typeNextSentence, 600); // Start after 1 second
+        });
+    </script>
+</body>
